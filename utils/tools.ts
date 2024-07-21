@@ -1,3 +1,4 @@
+import { isPhone } from './validate';
 /**
  * 获取图片宽高
  * @export
@@ -112,3 +113,37 @@ export const isSameValue = (newValue: unknown, oldValue: unknown) =>
  */
 export const toArray = <T>(item: T | T[]): T[] =>
   Array.isArray(item) ? item : [item];
+
+/**
+ * 将手机号进行脱敏处理，显示前三位和后四位，中间用星号替换
+ * @param phone - 要进行脱敏处理的手机号
+ * @returns 脱敏处理后的手机号
+ */
+export function maskPhoneNumber(phone: string) {
+  if (!isPhone(phone)) return
+  return phone.replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2');
+};
+
+/**
+ * 获取链接的参数值或将所有参数解析为对象
+ * @param key 参数键名，若为空则返回所有参数对象
+ * @param urlStr 链接地址，默认为当前浏览器的地址
+ * @returns 若提供了键名则返回对应的参数值，否则返回所有参数的对象
+ */
+export function getUrlParams(urlStr: string = window.location.href, key?: string): string | Record<string, string> {
+  if (!urlStr) return key ? '' : {};
+
+  const url = new URL(decodeURIComponent(urlStr));
+
+  // 如果没有提供键名，则返回所有参数的对象
+  if (!key) {
+    const params = {};
+    url.searchParams.forEach((value, paramKey) => {
+      params[paramKey] = value;
+    });
+    return params;
+  }
+
+  // 如果提供了键名，则返回对应的参数值
+  return url.searchParams.get(key) ?? '';
+};
