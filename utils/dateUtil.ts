@@ -56,7 +56,7 @@ export function getTimeStamp(time?: string, unit: 'milliseconds' | 'seconds' = '
 export function isWithinMaxDays(startTime: string, endTime: string, maxDays: number = 6) {
   const start = dayjs(startTime);
   const end = dayjs(endTime);
-  const difference = end.diff(start, 'day');
+  const difference = end.diff(start, 'day');// 计算两个日期之间的差异，+1即包括起始那一天
   return Math.abs(difference) <= maxDays;
 }
 
