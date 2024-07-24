@@ -147,3 +147,46 @@ export function getUrlParams(urlStr: string = window.location.href, key?: string
   // 如果提供了键名，则返回对应的参数值
   return url.searchParams.get(key) ?? '';
 };
+
+/**
+ * 动态加载外部脚本
+ * @param src - 要加载的脚本的源 URL。
+ * @param options - 一个包含脚本属性的对象，例如 async、defer 等。默认 async 为 true。
+ * @param target - 脚本添加的地方。默认是 'body'。
+ * @returns 一个 Promise，当脚本成功加载时 resolve，在加载出错时 reject。
+ */
+export function loadScript(src: string, options?: Partial<HTMLScriptElement>, target = 'body'): Promise<void> {
+  return new Promise((resolve, reject) => {
+      // 检查脚本是否已存在于文档中，以避免重复加载
+      const existingScript = document.querySelector(`script[src="${src}"]`);
+      if (existingScript) {
+          resolve();
+          return;
+      }
+
+      // 创建一个新的 script 元素
+      const script = document.createElement('script');
+      script.src = src;
+
+      // 应用 options 中的所有属性
+      Object.assign(script, options);
+
+      // 默认 async 属性为 true
+      if (options?.async === undefined) {
+          script.async = true;
+      }
+
+      // 设置事件监听器以处理脚本加载和错误事件
+      script.onload = () => resolve();
+      script.onerror = (e) => {
+          console.log(`加载脚本失败：error -->`, e);
+          reject(new Error(`加载脚本失败: ${src}`))
+      };
+
+      // 将脚本添加到指定的 target 中以开始加载
+      const targetElement = document.querySelector(target);
+      if (targetElement) {
+          targetElement.appendChild(script);
+      }
+  });
+}
