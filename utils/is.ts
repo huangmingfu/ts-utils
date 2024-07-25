@@ -64,3 +64,7 @@ export const isStringNumber = (val: string): boolean => {
 export const isWindow = (val: unknown): val is Window => {
   return val === window
 }
+
+export function isEmptyObject(obj: any): boolean {
+  return isObject(obj) && Object.keys(obj).length === 0;
+}
