@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "deploy": "git add . && git commit -m \"gitee自动部署\" && git push -u origin master"
+    "deploy": "git add . && git commit -m \"gitee自动部署\" && git push -u origin/master"
   },
   "keywords": [],
   "author": "",
