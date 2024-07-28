@@ -1,3 +1,5 @@
+// copy by https://any86.github.io/any-rule/
+
 /**
  * @description 判断是否是邮箱
  * @param value
@@ -82,39 +84,54 @@ export function isBase64(value: string) {
 };
 
 /**
- * @description 验证密码强度值
- * @param value
- * @returns {number}
+ * 验证密码强度值
+ * @param password - 需要验证的密码字符串
+ * @returns 密码强度的分数（0-5）
  * @example
    const pwd1 = '12345';
    const pwd1Strength = checkPasswordStrength(pwd1);// 0
    const pwd2 = '123456';
-   const pwd2Strength = checkPasswordStrength(pwd2);// 1
+   const pwd2Strength = checkPasswordStrength(pwd2);// 2
    const pwd3 = '123456qwe';
-   const pwd3Strength = checkPasswordStrength(pwd3);// 2
+   const pwd3Strength = checkPasswordStrength(pwd3);// 3
    const pwd4 = '123456qweABC';
-   const pwd4Strength = checkPasswordStrength(pwd4);// 3
+   const pwd4Strength = checkPasswordStrength(pwd4);// 4
    const pwd5 = '123@456qwe=ABC';
-   const pwd5Strength = checkPasswordStrength(pwd5);// 4
+   const pwd5Strength = checkPasswordStrength(pwd5);// 5
  */
-export function checkPasswordStrength(value: string | number): number {
-    let strength = 0;
-    const val = value?.toString();
-    if (!val || val.length < 6) {
-        strength = 0;
-        return strength;
+export function checkPasswordStrength(password: string | number): number {
+    let score = 0;
+    password = password.toString();
+
+    // 定义密码强度评分规则
+    const lengthCriteria = password.length >= 6; // 密码长度至少为6个字符
+    const upperCaseCriteria = /[A-Z]/.test(password); // 至少包含一个大写字母
+    const lowerCaseCriteria = /[a-z]/.test(password); // 至少包含一个小写字母
+    const numberCriteria = /[0-9]/.test(password); // 至少包含一个数字
+    const specialCharCriteria = /[!@#$%^&*(),.?":{}|<>]/.test(password); // 至少包含一个特殊字符
+
+    // 根据规则逐项检查并评分
+    if (lengthCriteria) {
+        score++;
+    } else {
+        return 0
     }
-    if (/[a-z]/.test(val)) {
-        strength += 1;
+
+    if (upperCaseCriteria) {
+        score++;
     }
-    if (/[A-Z]/.test(val)) {
-        strength += 1;
+
+    if (lowerCaseCriteria) {
+        score++;
     }
-    if (/\d/.test(val)) {
-        strength += 1;
+
+    if (numberCriteria) {
+        score++;
     }
-    if (/[\W_]/.test(val)) {
-        strength += 1;
+
+    if (specialCharCriteria) {
+        score++;
     }
-    return strength;
+
+    return score;
 }

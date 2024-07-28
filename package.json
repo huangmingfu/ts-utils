@@ -4,9 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "jest",
     "deploy": "git add . && git commit -m \"gitee自动部署\" && git push -u origin master"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.3"
+  }
 }

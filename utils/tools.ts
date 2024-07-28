@@ -1,4 +1,3 @@
-import { isPhone } from './validate';
 /**
  * 获取图片宽高
  * @export
@@ -115,14 +114,23 @@ export const toArray = <T>(item: T | T[]): T[] =>
   Array.isArray(item) ? item : [item];
 
 /**
- * 将手机号进行脱敏处理，显示前三位和后四位，中间用星号替换
- * @param phone - 要进行脱敏处理的手机号
- * @returns 脱敏处理后的手机号
+ * 进行脱敏处理，显示前指定位数和后指定位数，中间用星号替换
+ * @param val - 要进行脱敏处理的数据（如手机号、身份证号）
+ * @param frontLen - 前面保留的位数，默认为3
+ * @param endLen - 后面保留的位数，默认为4
+ * @returns 脱敏处理后的字符串
  */
-export function maskPhoneNumber(phone: string) {
-  if (!isPhone(phone)) return
-  return phone.replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2');
-};
+export function maskSensitiveInfo(val: string | number, frontLen: number = 3, endLen: number = 4): string {
+  const str = val.toString();
+  const totalLen = frontLen + endLen;
+  if (str.length <= totalLen) {
+    throw new Error('Input is too short to mask with the given lengths');
+  }
+  const visibleStart = str.slice(0, frontLen);
+  const visibleEnd = str.slice(-endLen);
+  const masked = '*'.repeat(str.length - totalLen);
+  return `${visibleStart}${masked}${visibleEnd}`;
+}
 
 /**
  * 获取链接的参数值或将所有参数解析为对象
@@ -157,36 +165,36 @@ export function getUrlParams(urlStr: string = window.location.href, key?: string
  */
 export function loadScript(src: string, options?: Partial<HTMLScriptElement>, target = 'body'): Promise<void> {
   return new Promise((resolve, reject) => {
-      // 检查脚本是否已存在于文档中，以避免重复加载
-      const existingScript = document.querySelector(`script[src="${src}"]`);
-      if (existingScript) {
-          resolve();
-          return;
-      }
+    // 检查脚本是否已存在于文档中，以避免重复加载
+    const existingScript = document.querySelector(`script[src="${src}"]`);
+    if (existingScript) {
+      resolve();
+      return;
+    }
 
-      // 创建一个新的 script 元素
-      const script = document.createElement('script');
-      script.src = src;
+    // 创建一个新的 script 元素
+    const script = document.createElement('script');
+    script.src = src;
 
-      // 应用 options 中的所有属性
-      Object.assign(script, options);
+    // 应用 options 中的所有属性
+    Object.assign(script, options);
 
-      // 默认 async 属性为 true
-      if (options?.async === undefined) {
-          script.async = true;
-      }
+    // 默认 async 属性为 true
+    if (options?.async === undefined) {
+      script.async = true;
+    }
 
-      // 设置事件监听器以处理脚本加载和错误事件
-      script.onload = () => resolve();
-      script.onerror = (e) => {
-          console.log(`加载脚本失败：error -->`, e);
-          reject(new Error(`加载脚本失败: ${src}`))
-      };
+    // 设置事件监听器以处理脚本加载和错误事件
+    script.onload = () => resolve();
+    script.onerror = (e) => {
+      console.log(`加载脚本失败：error -->`, e);
+      reject(new Error(`加载脚本失败: ${src}`))
+    };
 
-      // 将脚本添加到指定的 target 中以开始加载
-      const targetElement = document.querySelector(target);
-      if (targetElement) {
-          targetElement.appendChild(script);
-      }
+    // 将脚本添加到指定的 target 中以开始加载
+    const targetElement = document.querySelector(target);
+    if (targetElement) {
+      targetElement.appendChild(script);
+    }
   });
 }

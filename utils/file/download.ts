@@ -1,3 +1,5 @@
+// copy by https://github.com/vbenjs/vue-vben-admin
+
 import { dataURLtoBlob, urlToBase64 } from './base64Conver';
 
 type TargetContext = '_self' | '_blank';

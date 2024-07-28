@@ -1,3 +1,5 @@
+// copy by https://github.com/youzan/vant
+
 import { isClient } from './browser';
 
 /**

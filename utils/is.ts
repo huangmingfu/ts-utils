@@ -1,3 +1,5 @@
+// copy by https://github.com/element-plus/element-plus
+
 import { isArray, isObject, isString } from '@vue/shared'
 
 export {
