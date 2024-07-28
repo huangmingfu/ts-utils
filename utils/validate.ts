@@ -88,16 +88,11 @@ export function isBase64(value: string) {
  * @param password - 需要验证的密码字符串
  * @returns 密码强度的分数（0-5）
  * @example
-   const pwd1 = '12345';
-   const pwd1Strength = checkPasswordStrength(pwd1);// 0
-   const pwd2 = '123456';
-   const pwd2Strength = checkPasswordStrength(pwd2);// 2
-   const pwd3 = '123456qwe';
-   const pwd3Strength = checkPasswordStrength(pwd3);// 3
-   const pwd4 = '123456qweABC';
-   const pwd4Strength = checkPasswordStrength(pwd4);// 4
-   const pwd5 = '123@456qwe=ABC';
-   const pwd5Strength = checkPasswordStrength(pwd5);// 5
+ * checkPasswordStrength('12345');          // => 0
+ * checkPasswordStrength('123456');         // => 2
+ * checkPasswordStrength('123456qwe');      // => 3
+ * checkPasswordStrength('123456qweABC');   // => 4
+ * checkPasswordStrength('123@456qwe=ABC'); // => 5
  */
 export function checkPasswordStrength(password: string | number): number {
     let score = 0;
