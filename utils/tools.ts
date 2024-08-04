@@ -145,7 +145,7 @@ export function getUrlParams(urlStr: string = window.location.href, key?: string
 
   // 如果没有提供键名，则返回所有参数的对象
   if (!key) {
-    const params = {};
+    const params: Record<string, string> = {};
     url.searchParams.forEach((value, paramKey) => {
       params[paramKey] = value;
     });
@@ -197,4 +197,16 @@ export function loadScript(src: string, options?: Partial<HTMLScriptElement>, ta
       targetElement.appendChild(script);
     }
   });
+}
+
+/**
+ * 平滑滚动到页面上的指定元素
+ * @param el 要滚动到的目标元素
+ * @param block 滚动到元素的哪个位置，可选值包括'start', 'center', 'end'等，默认为'start'
+ */
+export function scrollTo(el: HTMLElement, block: ScrollLogicalPosition = 'start') {
+  el.scrollIntoView({
+    behavior: 'smooth',
+    block,
+  })
 }
