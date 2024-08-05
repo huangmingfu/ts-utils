@@ -210,3 +210,61 @@ export function scrollTo(el: HTMLElement, block: ScrollLogicalPosition = 'start'
     block,
   })
 }
+
+/**
+ * 从对象中省略不需要的属性
+ * @param obj 
+ * @param keys 
+ */
+export const omit = <T, TKeys extends keyof T>(
+  obj: T,
+  keys: TKeys[]
+): Omit<T, TKeys> => {
+  if (!obj) return {} as Omit<T, TKeys>
+  if (!keys || keys.length === 0) return obj as Omit<T, TKeys>
+  return keys.reduce(
+    (acc, key) => {
+      delete acc[key]
+      return acc
+    },
+    { ...obj }
+  )
+}
+
+/**
+ * 从对象中仅选择所需的属性
+ * @param obj 
+ * @param keys 
+ */
+export const pick = <T extends object, TKeys extends keyof T>(
+  obj: T,
+  keys: TKeys[]
+): Pick<T, TKeys> => {
+  if (!obj) return {} as Pick<T, TKeys>
+  return keys.reduce((acc, key) => {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) acc[key] = obj[key]
+    return acc
+  }, {} as Pick<T, TKeys>)
+}
+
+/**
+ * 移除对象中满足特定条件的属性
+ * @param {T} obj 要处理的对象
+ * @param {(value: any) => boolean} filter 判断属性值是否需要移除的函数，默认移除值为undefined的属性
+ * @returns {Omit<T, RemovedKeys>} 返回一个新的对象，该对象中移除了满足filter条件的属性
+ */
+export const shake = <RemovedKeys extends string, T>(
+  obj: T,
+  filter: (value: any) => boolean = x => x === undefined
+): Omit<T, RemovedKeys> => {
+  if (!obj) return {} as T
+  const keys = Object.keys(obj) as (keyof T)[]
+  return keys.reduce((acc, key) => {
+    if (filter(obj[key])) {
+      return acc
+    } else {
+      acc[key] = obj[key]
+      return acc
+    }
+  }, {} as T)
+}
